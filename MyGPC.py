@@ -1,6 +1,10 @@
 import scipy.io as sio
 import numpy as np
 from sklearn.gaussian_process import GaussianProcessClassifier
+import math
+
+def sigmoid(x):
+  return 1 / (1 + math.exp(-x))
 
 def GPC(XEstimate, ClassLabels, XValidate, YValidate, Parameters):	
 	N = XEstimate.shape[0] #number of XEstimate data records
@@ -52,7 +56,7 @@ def GPC(XEstimate, ClassLabels, XValidate, YValidate, Parameters):
 			print('GPC: class ' + str(i) + ' to class ' + str(j) + ' fitted')
 		Z[i][i] = np.zeros([XValidate.shape[0], Nc])
 		print('GPC for class ' + str(i) + ' all fitted')
-
+	#class labels
 	CL = np.zeros([Nv, Nc])
 	for i in range(Nv):
 		for j in range(Nc):
@@ -67,6 +71,7 @@ def GPC(XEstimate, ClassLabels, XValidate, YValidate, Parameters):
 		std = np.std(CL[i])
 		mean = np.mean(CL[i])
 		bounded_std = 1/(np.exp(10*Nc*std))
+		#bounded_std = 1/np.exp(10*Nc*(sigmoid(std)-0.5))
 		addColumn.append(bounded_std)
 	addColumn = np.matrix(addColumn).transpose()
 	CL = np.hstack([CL, addColumn])
@@ -74,10 +79,11 @@ def GPC(XEstimate, ClassLabels, XValidate, YValidate, Parameters):
 	for i in range(Nv):
 		norm_denominator = 1 + addColumn[i]
 		CL[i] /= norm_denominator
+	print CL
 	rightnum = 0
 	anothernum = 0
 	for i in range(Nv):
-		if np.argmax(CL[i]) == 5:
+		if np.argmax(CL[i]) == Nc:
 			anothernum+=1
 			continue
 		if YValidate[i][np.argmax(CL[i])] == 1:
@@ -85,11 +91,6 @@ def GPC(XEstimate, ClassLabels, XValidate, YValidate, Parameters):
 	print "accuracy:", float(rightnum)/Nv
 	print "anotherrate:", float(anothernum)/Nv
 
-	#print CL[:100]
-	#for i in range(Nc):
-	#	print np.matrix(data[i]).shape
-
-	#YE = np.hstack( (YE, np.zeros((N,1))) )
 	YValidate = CL
 	EstParameters = {'Parameters': Parameters, 'EstParameters': EstParams, 'Nclasses': Nc}
 	return YValidate, EstParameters

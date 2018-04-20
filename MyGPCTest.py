@@ -64,7 +64,7 @@ def Test(XTest, YValidate, EstParameters, Parameters = None):
 	rightnum = 0
 	anothernum = 0
 	for i in range(Nt):
-		if np.argmax(CL[i]) == 5:
+		if np.argmax(CL[i]) == Nc:
 			anothernum+=1
 			continue
 		if YValidate[i][np.argmax(CL[i])] == 1:
