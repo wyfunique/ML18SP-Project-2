@@ -39,10 +39,10 @@ def GPC(XEstimate, ClassLabels, XValidate, YValidate, Parameters):
 			#here use multi-class = 'one_vs_rest' rather than 'one_vs_one', 
 			#because the latter one does not support returning probability.
 			#We implement one_vs_one method manually here 
-			myGPC = GaussianProcessClkernel=Parameters['kernel'], optimizer=Parameters['optimizer'], 
+			myGPC = GaussianProcessClassifier(kernel=Parameters['kernel'], optimizer=Parameters['optimizer'], 
 				n_restarts_optimizer=Parameters['n_restarts_optimizer'], max_iter_predict=Parameters['max_iter_predict'], 
 				warm_start=Parameters['warm_start'], copy_X_train=Parameters['copy_X_train'], random_state=Parameters['random_state'], 
-				multi_class='one_vs_rest', n_jobs=Parameters['n_jobs'])assifier(
+				multi_class='one_vs_rest', n_jobs=Parameters['n_jobs'])
 			myGPC.fit(X, y)
 			#Params[i][j] = myGPC.get_params()
 			estparam = {'classes_': myGPC.classes_, 'n_classes_': myGPC.n_classes_, 'base_estimator_': myGPC.base_estimator_}
