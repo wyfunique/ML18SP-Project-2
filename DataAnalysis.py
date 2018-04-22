@@ -199,10 +199,14 @@ class DataAnalysis:
 
 
 if __name__ == "__main__":
-
+    
+    # Read input data file in .mat format
+    # Warning: Files must match format given in project description 
     input_dict = loadmat("D:/Project 2/Proj2FeatVecsSet1.mat")
     input_vec = input_dict['Proj2FeatVecsSet1']
-
+    
+    # Read label file in .mat format
+    # Warning: Files must match format given in project description
     label_dict = loadmat("D:/Project 2/Proj2TargetOutputsSet1.mat")
     label_vec = label_dict['Proj2TargetOutputsSet1']
 
