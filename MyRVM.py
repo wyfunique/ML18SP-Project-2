@@ -18,7 +18,7 @@ def TrainMyRVM(XEstimate, XValidate, ClassLabelsEstimate, ClassLabelsValidate, P
     #predict and return an array of classes for each input
     Yvalidate = clf.predict(XValidate)
     EstParameters = clf.get_params();
-    return Yvalidate, EstParameters
+    return Yvalidate, EstParameters, clf.relevance_.shape[0]
 
 def TestMyRVM(XTest, EstParameters,Parameters=None):
     test_clf = RVC()
