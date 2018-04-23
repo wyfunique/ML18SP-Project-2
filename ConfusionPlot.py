@@ -22,7 +22,15 @@ def plot_confusion_matrix(actual_labels, predicted_labels, normalize=False):
 
     # Generate Confusion Matrix
     cnf_matrix = confusion_matrix(actual_labels, predicted_labels)
-
+    #calculate accuracy
+    total_num = 0
+    correct_num = 0
+    for i in range(cnf_matrix.shape[0]):
+        for j in range(cnf_matrix.shape[1]):
+            total_num += cnf_matrix[i][j]
+            if i == j:
+                correct_num += cnf_matrix[i][j]
+    accuracy = float(correct_num) / total_num
     # Normalize the Confusion Matrix if flag is set
     if normalize:
         cnf_matrix = cnf_matrix.astype('float') / cnf_matrix.sum(axis=1)[:, np.newaxis]
@@ -47,6 +55,8 @@ def plot_confusion_matrix(actual_labels, predicted_labels, normalize=False):
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
     plt.show()
+    #print accuracy
+    return cnf_matrix, accuracy
 
 
 if __name__ == "__main__":
