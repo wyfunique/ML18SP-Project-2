@@ -1,7 +1,7 @@
 import scipy.io as sio
 import numpy as np
-from skrvm import RVR
-from skrvm import RVC
+from skbayes.rvm_ard_models import RegressionARD,ClassificationARD,RVR,RVC
+
 
 def TrainMyRVM(XEstimate, XValidate, ClassLabelsEstimate, ClassLabelsValidate, Parameters=None):
     training_labels = np.int8(np.zeros(ClassLabelsEstimate.shape[0]))
@@ -12,13 +12,13 @@ def TrainMyRVM(XEstimate, XValidate, ClassLabelsEstimate, ClassLabelsValidate, P
         validate_labels[i] = np.where(ClassLabelsValidate[i]==1)[0]
 
     #initialize RVM with classification (RVC class)
-    clf = RVC()
+    rvm = RVC(gamma = 1, kernel = 'rbf')
     #fit RVM
-    clf.fit(XEstimate, training_labels)
+    rvm.fit(XEstimate, training_labels)
     #predict and return an array of classes for each input
-    Yvalidate = clf.predict(XValidate)
-    EstParameters = clf.get_params();
-    return Yvalidate, EstParameters, clf.relevance_.shape[0]
+    Yvalidate = rvm.predict(XValidate)
+    EstParameters = "";
+    return Yvalidate, EstParameters, rvm.relevant_vectors_.shape[0]
 
 def TestMyRVM(XTest, EstParameters,Parameters=None):
     test_clf = RVC()
