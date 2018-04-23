@@ -6,10 +6,10 @@ import math
 def sigmoid(x):
   return 1 / (1 + math.exp(-x))
 
-def GPC(XEstimate, ClassLabels, XValidate, YValidate, Parameters):	
+def GPC(XEstimate, ClassLabels_Train, XValidate, ClassLabels_Validate, Parameters):	
 	N = XEstimate.shape[0] #number of XEstimate data records
 	Nv = XValidate.shape[0] #number of XValidate data records
-	Nc = ClassLabels.shape[1] #number of classes
+	Nc = ClassLabels_Train.shape[1] #number of classes
 
 	data = [] #training data list, separated w.r.t. class
 	#Params = [] #Parameters
@@ -28,7 +28,7 @@ def GPC(XEstimate, ClassLabels, XValidate, YValidate, Parameters):
 	#data[i] are all Training Xs that belong to class i
 	for i in range(N):
 		for j in range(Nc):
-			if ClassLabels[i][j] == 1:
+			if ClassLabels_Train[i][j] == 1:
 				data[j].append(XEstimate[i])
 	for i in range(Nc):
 		data[i] = np.matrix(data[i])
@@ -86,7 +86,7 @@ def GPC(XEstimate, ClassLabels, XValidate, YValidate, Parameters):
 		if np.argmax(CL[i]) == Nc:
 			anothernum+=1
 			continue
-		if YValidate[i][np.argmax(CL[i])] == 1:
+		if ClassLabels_Validate[i][np.argmax(CL[i])] == 1:
 			rightnum+=1
 	print "accuracy:", float(rightnum)/Nv
 	print "anotherrate:", float(anothernum)/Nv

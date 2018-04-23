@@ -18,7 +18,7 @@ if __name__ == '__main__':
 	#N = Y.shape[0]
 	#Y = np.hstack( (Y, np.zeros((N,1))) )
 	#print Y
-	
+	#X = np.delete(X, -1, axis=1)
 	XE0 = X[:200]
 	XE1 = X[5000:5200]
 	XE2 = X[10000:10200]
@@ -27,6 +27,7 @@ if __name__ == '__main__':
 	
 	XE = np.vstack([XE0, XE1, XE2, XE3, XE4])
 
+	#Y = np.delete(Y, -1, axis=1)
 	YE0 = Y[:200]
 	YE1 = Y[5000:5200]
 	YE2 = Y[10000:10200]
@@ -40,7 +41,7 @@ if __name__ == '__main__':
 	XE2 = X[10000:14000]
 	XE3 = X[15000:19000]
 	XE4 = X[20000:24000]
-	
+
 	XEE = np.vstack([XE0, XE1, XE2, XE3, XE4])
 
 	YE0 = Y[:4000]
@@ -57,7 +58,8 @@ if __name__ == '__main__':
 	XV3 = X[19000:20000]
 	XV4 = X[24000:25000]
 	XV_a = np.vstack([XV0, XV1, XV2, XV3, XV4])
-	XV_b = np.vstack([XV3, XV4])
+	XV_b = np.vstack([XV0, XV1, XV2, XV3])
+	XV_c = np.vstack([XV4])
 
 	YV0 = Y[4000:5000]
 	YV1 = Y[9000:10000]
@@ -65,7 +67,10 @@ if __name__ == '__main__':
 	YV3 = Y[19000:20000]
 	YV4 = Y[24000:25000]
 	YV_a = np.vstack([YV0, YV1, YV2, YV3, YV4])
-	YV_b = np.vstack([YV3, YV4])
-	YValidate, EstParameters = GPC(XE, YE, XV_a, YV_a, Parameters)
-	YTest = Test(XV_b, YV_b, EstParameters)
+	YV_b = np.vstack([YV0, YV1, YV2, YV3])
+	YV_c = np.vstack([YV4])
+	#a = np.zeros([1000, 3])
+	#YV_b = np.hstack([a])
+	YValidate, EstParameters = GPC(XE, YE, XV_c, YV_c, Parameters)
+	YTest = Test(XV_b, EstParameters)
 #	np.savetxt("output.txt", YV, newline = "")	

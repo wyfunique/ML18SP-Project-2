@@ -1,7 +1,7 @@
 import scipy.io as sio
 import numpy as np
 from sklearn.gaussian_process import GaussianProcessClassifier
-def Test(XTest, YValidate, EstParameters, Parameters = None):
+def Test(XTest, EstParameters, Parameters = None):
 	Parameters = EstParameters['Parameters']
 	EstParams = EstParameters['EstParameters']
 	Nc = EstParameters['Nclasses']
@@ -59,7 +59,7 @@ def Test(XTest, YValidate, EstParameters, Parameters = None):
 	for i in range(Nt):
 		norm_denominator = 1 + addColumn[i]
 		CL[i] /= norm_denominator
-
+	'''
 	#accuracy
 	rightnum = 0
 	anothernum = 0
@@ -71,6 +71,6 @@ def Test(XTest, YValidate, EstParameters, Parameters = None):
 			rightnum+=1
 	print "accuracy:", float(rightnum)/Nt
 	print "anotherrate:", float(anothernum)/Nt
-
+	'''
 	YTest = CL
 	return YTest
