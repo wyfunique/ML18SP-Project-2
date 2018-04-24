@@ -34,7 +34,7 @@ def TrainMySVM(XEstimate, XValidate, ClassLabelsEstimate, ClassLabelsValidate, P
         train_labels[i] = np.where(ClassLabelsEstimate[i] == 1)[0]
     for i in range(ClassLabelsValidate.shape[0]):
         cv_labels[i] = np.where(ClassLabelsValidate[i] == 1)[0]
-    '''
+    
     print "Training SVM and estimating parameters... "
     print "(This process may need 5-10 minutes.)"
     C_range = 10. ** np.arange(-2, 3) # 10 is best
@@ -44,8 +44,8 @@ def TrainMySVM(XEstimate, XValidate, ClassLabelsEstimate, ClassLabelsValidate, P
     grid.fit(XEstimate, train_labels)
     svm = grid.best_estimator_
     print "The best Hyper-parameters for SVM: " + str(svm)
-    '''
-    svm = SVC(C=10, gamma=1, max_iter=100, decision_function_shape='ovo', probability=True)
+    
+    #svm = SVC(C=10, gamma=1, max_iter=100, decision_function_shape='ovo', probability=True)
     svm.fit(XEstimate, train_labels)
     cv_predict_prob = svm.predict_proba(XValidate)
     #cv_predict = svm.predict(XValidate)

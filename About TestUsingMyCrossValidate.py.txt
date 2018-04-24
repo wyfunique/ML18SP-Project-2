@@ -1,0 +1,15 @@
+1. After each fold, 
+print "==== Test Accuracy: %f ====" % (cv_acc)
+print "Vector number: %d" % VecNum
+will print accuracy and vector number in this fold. You need to save them.
+
+2. After all folds,
+print ConfMatrix
+plot_confusion_matrix(get_scalar(ClassLabels), get_scalar(OverallValidate), normalize=True)
+will print and plot the overall confusion matrix.
+If you run code on a server without GUI, you may have to save what be printed and plot the matrix by yourself.
+
+3. In main():
+Ytrain, EstParametersArray, EstConfMatricesArray, ConfMatrix = MyCrossValidate(input_vec, label_vec, 5, {'type':'SVM'})
+Please replace 'SVM' with 'RVM'.
+Then you can run the code.

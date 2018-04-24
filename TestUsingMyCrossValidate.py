@@ -1,8 +1,12 @@
 import numpy as np
 from DataAnalysis import DataAnalysis
 from ConfusionPlot import plot_confusion_matrix
+
 from TrainMyClassifier import TrainMyClassifier
 from TestMyClassifier import TestMyClassifier
+#from MySVM import TrainMySVM as TrainMyClassifier
+#from MySVM import TestMySVM as TestMyClassifier
+
 from scipy.io import loadmat
 from sklearn.model_selection import KFold, StratifiedKFold
 from sklearn.metrics import confusion_matrix
@@ -36,27 +40,27 @@ def MyCrossValidate(XTrain, ClassLabels, Nf, Parameters):
         XValidate = cv_data
         ClassLabelsValidate = cv_labels
         Yvalidate, EstParameters, VecNum = TrainMyClassifier(XEstimate, XValidate, ClassLabelsEstimate, ClassLabelsValidate, Parameters)
-        '''
+        
         cv_acc = sum([1 for i in range(Yvalidate.shape[0]) if np.argmax(Yvalidate[i]) == np.argmax(ClassLabelsValidate[i])]) / float(ClassLabelsValidate.shape[0])
         print "==== Test Accuracy: %f ====" % (cv_acc)
         print "Vector number: %d" % VecNum
         #print confusion_matrix(get_scalar(ClassLabelsValidate), get_scalar(Yvalidate))
         #plot_confusion_matrix(get_scalar(ClassLabelsValidate), get_scalar(Yvalidate), normalize=True)
         #raw_input()
-        '''
+        
         Ytrain.append(Yvalidate)
         EstParametersArray.append(EstParameters)
         EstConfMatricesArray.append(confusion_matrix(get_scalar(ClassLabelsValidate), get_scalar(Yvalidate)))
     
     OverallValidate, EstParameters, VecNum = TrainMyClassifier(XTrain, XTrain, ClassLabels, ClassLabels, Parameters)  
     ConfMatrix = confusion_matrix(get_scalar(ClassLabels), get_scalar(OverallValidate))
-    '''
-    #print ConfMatrix
+    
+    print ConfMatrix
     plot_confusion_matrix(get_scalar(ClassLabels), get_scalar(OverallValidate), normalize=True)
-    '''
+    
     return Ytrain, EstParametersArray, EstConfMatricesArray, ConfMatrix
 
-'''
+
 if __name__ == '__main__':
     input_dict = loadmat("Proj2FeatVecsSet1.mat")
     input_vec = input_dict['Proj2FeatVecsSet1']
@@ -81,4 +85,3 @@ if __name__ == '__main__':
     #print v3[0]
     #raw_input()
     #print v4 
-'''
