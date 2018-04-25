@@ -16,12 +16,12 @@ class DataAnalysis:
         :param label_vector: Assumes format [-1,-1,....,1,....-1]
                              -1:False class     1:True Class
                              array like m-samples x k-classes
-        :param n_cross_validation: Number of divisions in dataset. Splits data into 'n + 1' sections.
-                                   'n' for training, '1' for testing
+        :param n_cross_validation: Number of divisions in dataset. Splits data into 'n' sections. Depending on the
+		                          distance distribution, one split will have a few more datapoints than the rest. 
         """
         self.input = input_vectors
         self.label = label_vector
-        self.n_valid = n_cross_validation + 1
+        self.n_valid = n_cross_validation
 
         # Generates the covariance matrix for the input data
         _, self.covariance_matrix = self._generate_covariance_matrix()
@@ -38,8 +38,8 @@ class DataAnalysis:
         # Calculate unique labels
         cluster_num = np.unique(self.label)
         # Dictionary to store processed dataset
-        self.cross_validation_dataset = self._generate_cluster_dict(len(cluster_num), 1)
-        self.cross_validation_labels = self._generate_cluster_dict(len(cluster_num), 1)
+        self.cross_validation_dataset = self._generate_cluster_dict(self.n_valid - 1, 1)
+        self.cross_validation_labels = self._generate_cluster_dict(self.n_valid - 1, 1)
 
         # Go through data and bin clusters based on the binsize
         for cluster in cluster_num:
@@ -199,19 +199,17 @@ class DataAnalysis:
 
 
 if __name__ == "__main__":
-    
-    # Read input data file in .mat format
-    # Warning: Files must match format given in project description 
+
     input_dict = loadmat("D:/Project 2/Proj2FeatVecsSet1.mat")
     input_vec = input_dict['Proj2FeatVecsSet1']
-    
-    # Read label file in .mat format
-    # Warning: Files must match format given in project description
+
     label_dict = loadmat("D:/Project 2/Proj2TargetOutputsSet1.mat")
     label_vec = label_dict['Proj2TargetOutputsSet1']
 
     DP = DataAnalysis(input_vec, label_vec, n_cross_validation=5)
+
     # Get processed data
     data, labels = DP.get_dataset()
+
     # Plot distance distribution
     DP.plot_cluster_distance_plot()
