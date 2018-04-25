@@ -6,6 +6,7 @@ from sklearn.svm import SVC
 from sklearn.grid_search import GridSearchCV
 #from sklearn.preprocessing import normalize
 
+# Normalize each row in a 2D array 
 def normalize2D(array):
     if array.dtype != float:
         array = array.astype(float)
@@ -13,6 +14,7 @@ def normalize2D(array):
         array[i] = np.divide(array[i], np.sum(array[i]))
     return array
 
+# Calculate the probability of current sample not in any class and merge it into the predict labels
 def GetClassLabels(svm_predict_prob):
     ClassLabels = np.zeros((svm_predict_prob.shape[0], svm_predict_prob.shape[1]+1))
     for i in range(svm_predict_prob.shape[0]):
@@ -59,6 +61,8 @@ def TrainMySVM(XEstimate, XValidate, ClassLabelsEstimate, ClassLabelsValidate, P
     'intercept_', '_sparse', 'shape_fit_', '_dual_coef_', '_intercept_', 'probA_', 'probB_', '_gamma', 'classes_']
     EstParameters['HyperParameters'] = svm.get_params()
     EstParameters['EstimatedParameters'] = {}
+    
+    # Get all parameters we need
     for p in InternalParams:
         try:
             EstParameters['EstimatedParameters'][p] = eval('svm.%s'%p)
@@ -74,11 +78,16 @@ def TestMySVM(XTest, EstParameters, Parameters=None):
     svm = SVC(C=hyperParams['C'], gamma=hyperParams['gamma'], kernel=hyperParams['kernel'], max_iter=hyperParams['max_iter'], decision_function_shape='ovo', probability=True)
     InternalParams = ['support_', 'support_vectors_', 'n_support_', 'dual_coef_', 'coef_', 
     'intercept_', '_sparse', 'shape_fit_', '_dual_coef_', '_intercept_', 'probA_', 'probB_', '_gamma', 'classes_']
+    
+    # Set all parameters we need
     for p in InternalParams:
         try:
             exec('svm.%s = trainedParams[p]'%p) 
         except: 
             continue
+            
+    # Predict probabilities of each class
     test_predict_prob = svm.predict_proba(XTest)
+    # Add probability of not in any class
     Ytest = GetClassLabels(test_predict_prob)
     return Ytest
