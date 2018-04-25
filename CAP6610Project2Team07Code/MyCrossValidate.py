@@ -14,6 +14,7 @@ def MyCrossValidate(XTrain, ClassLabels, Nf, Parameters):
     
     kf_cv = StratifiedKFold(n_splits=Nf, shuffle=True)
     
+    # Convert Classlabel vector to a single scalar indicating which class the sample is in
     def get_scalar(ClassLabels):
         scalar_labels = np.uint(np.zeros(ClassLabels.shape[0]))
         for i in range(scalar_labels.shape[0]):
@@ -25,6 +26,7 @@ def MyCrossValidate(XTrain, ClassLabels, Nf, Parameters):
     EstParametersArray = []
     EstConfMatricesArray = []
     
+    # Split estimation and cross validation sets
     for est_idx, cv_idx in kf_cv.split(XTrain, scalar_labels):
         est_data = XTrain[est_idx]
         est_labels = ClassLabels[est_idx]
@@ -49,6 +51,7 @@ def MyCrossValidate(XTrain, ClassLabels, Nf, Parameters):
         EstConfMatricesArray.append(confusion_matrix(get_scalar(ClassLabelsValidate), get_scalar(Yvalidate)))
     
     OverallValidate, EstParameters, VecNum = TrainMyClassifier(XTrain, XTrain, ClassLabels, ClassLabels, Parameters)  
+    # Overall confusion matrix
     ConfMatrix = confusion_matrix(get_scalar(ClassLabels), get_scalar(OverallValidate))
     '''
     #print ConfMatrix
@@ -56,29 +59,3 @@ def MyCrossValidate(XTrain, ClassLabels, Nf, Parameters):
     '''
     return Ytrain, EstParametersArray, EstConfMatricesArray, ConfMatrix
 
-'''
-if __name__ == '__main__':
-    input_dict = loadmat("Proj2FeatVecsSet1.mat")
-    input_vec = input_dict['Proj2FeatVecsSet1']
-    
-    # Read label file in .mat format
-    # Warning: Files must match format given in project description
-    label_dict = loadmat("Proj2TargetOutputsSet1.mat")
-    label_vec = label_dict['Proj2TargetOutputsSet1']
-
-    #DP = DataAnalysis(input_vec, label_vec, n_cross_validation=5)
-    # Get processed data
-    #data, labels = DP.get_dataset()
-
-    Ytrain, EstParametersArray, EstConfMatricesArray, ConfMatrix = MyCrossValidate(input_vec, label_vec, 5, {'type':'SVM'})
-    
-    #print v1[0].shape
-    #raw_input()
-    #print v2
-    #raw_input()
-    #print len(v2)
-    #raw_input()
-    #print v3[0]
-    #raw_input()
-    #print v4 
-'''
