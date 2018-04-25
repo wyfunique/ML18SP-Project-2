@@ -29,4 +29,6 @@
 
     (7) For MyConfusionMatrix(), the input Y should be estimated class names, and ClassNames is the true answer. Their format should be the same as input 'Proj2TargetOutputsSet1.mat', instead of class labels with probabilities.
     
+    (8) DataAnalysis.py analyses the distribution of distance of each cluster from its centroid. It can be used get an idea about the separability of data in the input space. It can also randomly split data in a way to preserve the distance distribution of each cluster in the validation dataset thereby giving stable results across all validation tests. The distance was scaled using covaraince in each dimension of the input space.
+    
     # please add what you want professor to notice. 
