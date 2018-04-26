@@ -11,7 +11,6 @@ class DataAnalysis:
         incurred in randomly choosing data for training. Algorithm modelled after Histogram Equalization.
         Mahalanobis distance is used to ensure uniform scaling in each dimension.
         Author: Ronald Wilson
-
         :param input_vectors: n-dimensional vector, array like m-samples x n-dimensions
         :param label_vector: Assumes format [-1,-1,....,1,....-1]
                              -1:False class     1:True Class
@@ -199,12 +198,12 @@ class DataAnalysis:
 
 
 if __name__ == "__main__":
-    
+
     # Read input data file in .mat format
-    # Warning: Files must match format given in project description 
+    # Warning: Files must match format given in project description
     input_dict = loadmat("D:/Project 2/Proj2FeatVecsSet1.mat")
     input_vec = input_dict['Proj2FeatVecsSet1']
-    
+
     # Read label file in .mat format
     # Warning: Files must match format given in project description
     label_dict = loadmat("D:/Project 2/Proj2TargetOutputsSet1.mat")

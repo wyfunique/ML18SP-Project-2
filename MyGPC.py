@@ -1,12 +1,9 @@
 import scipy.io as sio
 import numpy as np
 from sklearn.gaussian_process import GaussianProcessClassifier
-#import math
 
-#def sigmoid(x):
-#  return 1 / (1 + math.exp(-x))
 
-def TrainMyGPC(XEstimate, ClassLabels_Train, XValidate, ClassLabels_Validate, Parameters):	
+def TrainMyGPC(XEstimate, ClassLabels_Train, XValidate, ClassLabels_Validate, Parameters):
 	N = XEstimate.shape[0] #number of XEstimate data records
 	Nv = XValidate.shape[0] #number of XValidate data records
 	Nc = ClassLabels_Train.shape[1] #number of classes
@@ -40,12 +37,12 @@ def TrainMyGPC(XEstimate, ClassLabels_Train, XValidate, ClassLabels_Validate, Pa
 			label1 = np.ones([data[j].shape[0],])
 			y = np.hstack([label0, label1])
 			X = np.vstack([data[i], data[j]])
-			#here use multi-class = 'one_vs_rest' rather than 'one_vs_one', 
+			#here use multi-class = 'one_vs_rest' rather than 'one_vs_one',
 			#because the latter one does not support returning probability.
-			#We implement one_vs_one method manually here 
-			myGPC = GaussianProcessClassifier(kernel=Parameters['kernel'], optimizer=Parameters['optimizer'], 
-				n_restarts_optimizer=Parameters['n_restarts_optimizer'], max_iter_predict=Parameters['max_iter_predict'], 
-				warm_start=Parameters['warm_start'], copy_X_train=Parameters['copy_X_train'], random_state=Parameters['random_state'], 
+			#We implement one_vs_one method manually here
+			myGPC = GaussianProcessClassifier(kernel=Parameters['kernel'], optimizer=Parameters['optimizer'],
+				n_restarts_optimizer=Parameters['n_restarts_optimizer'], max_iter_predict=Parameters['max_iter_predict'],
+				warm_start=Parameters['warm_start'], copy_X_train=Parameters['copy_X_train'], random_state=Parameters['random_state'],
 				multi_class='one_vs_rest', n_jobs=Parameters['n_jobs'])
 			myGPC.fit(X, y)
 			#Params[i][j] = myGPC.get_params()
@@ -112,14 +109,14 @@ def TestMyGPC(XTest, EstParameters, Parameters = None):
 	for i in range(Nc):
 		for j in range(i+1, Nc):
 			myGPC = GaussianProcessClassifier(
-				kernel=Parameters['kernel'], 
-				optimizer=Parameters['optimizer'], 
-				n_restarts_optimizer=Parameters['n_restarts_optimizer'], 
-				max_iter_predict=Parameters['max_iter_predict'], 
-				warm_start=Parameters['warm_start'], 
-				copy_X_train=Parameters['copy_X_train'], 
-				random_state=Parameters['random_state'], 
-				multi_class='one_vs_rest', 
+				kernel=Parameters['kernel'],
+				optimizer=Parameters['optimizer'],
+				n_restarts_optimizer=Parameters['n_restarts_optimizer'],
+				max_iter_predict=Parameters['max_iter_predict'],
+				warm_start=Parameters['warm_start'],
+				copy_X_train=Parameters['copy_X_train'],
+				random_state=Parameters['random_state'],
+				multi_class='one_vs_rest',
 				n_jobs=Parameters['n_jobs'])
 			#myGPC.set_params(Parameters[i][j])
 			myGPC.classes_ = EstParams[i][j]['classes_']

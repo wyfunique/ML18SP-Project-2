@@ -1,0 +1,62 @@
+1. Dependencies:
+    python 2.7.8
+    scipy 1.0.0: loadmat() to load image mats
+    sklearn 0.19.1 or greater
+    numpy 1.13.1: main computing package
+    scikit-learn 0.19.1: SVM, GPR
+    matplotlib 2.2.2
+    skrvm (link below)
+    link: pip install https://github.com/JamesRitchie/scikit-rvm/archive/master.zip
+
+NOTE: FOR RVM TestMyClassifier please reduce the number of data points to 800 in order to save time. IDX in MyRVM gives the indices for this.
+
+2. Notice:
+
+    Run MyCrossValidate with inputs: XTrain, ClassLabels, Nf, Parameters. (Refer to (4) for Parameter details)
+
+    Refer to (3) for more info on MyCrossValidate
+
+    (1) In code folder, there are some other modules that are needed by the 4 main py files, like MySVM, MyGOC, MyRVM and so on.
+
+    (2) In function TrainMyClassifier(), since it is needed to pass class labels of estimation and validation into this function, we seperate them as two parameters, 'ClassLabelsEstimate' and 'ClassLabelsValidate'.
+        In addition, since we need to get the number of support and relevance vectors after training, we add a return parameter called 'VecNum' to do this.
+
+    (3) In function MyCrossValidate(), the parameter 'Parameters' contains which model you want to use.
+        The return items of this function are all lists instead of numpy arrays.
+        It returns Ytrain, EstParametersArray (Estimated parameters list), EstConfMatricesArray (confidence matrices list), ConfMatrix
+        This function will call TrainMyClassifier and MyConfusionMatrix for the validation set
+
+    (4) In all functions, the parameter 'Parameters' is a dictionary containing some special parameters you need.
+        For case of using SVM, 'Parameters' only need to have one key-value pair, {'type':'SVM'}.
+
+        For case of using RVM,'Parameters' only need to have two key-value pair, {'type':'RVM', 'n_iter':1}
+        where n_iter is the number of iterations (1 is an example of the its value)
+
+        For case of using GPC, other than 'type': 'GPC', 'Parameters' need to include some hyper-parameters:
+        kernel=Parameters['kernel'],
+				optimizer=Parameters['optimizer'],
+				n_restarts_optimizer=Parameters['n_restarts_optimizer'],
+				max_iter_predict=Parameters['max_iter_predict'],
+				warm_start=Parameters['warm_start'],
+				copy_X_train=Parameters['copy_X_train'],
+				random_state=Parameters['random_state'],
+				multi_class='one_vs_rest',
+				n_jobs=Parameters['n_jobs']
+
+        The format is like the following:Parameters = {'kernel': None, 'optimizer': 'fmin_l_bfgs_b', 'n_restarts_optimizer': 0, 'copy_X_train': True, 'random_state': None, 'max_iter_predict': 100, 'warm_start': False, 'multi_class': 'one_vs_rest', 'n_jobs': 1, 'type': 'GPC'}
+
+    (5) We added two variables in TrainMyClassifier() and TestMyClassifier(): ClassLabelsEstimate and ClassLabelsValidate, representing class labels for estimation and validation.
+        For RVM's TrainMyClassifier() output is : Yvalidate, EstParameters, ClassLabelsValidate, VecNum, idx
+        For SVM's TrainMyClassifier() output is: Yvalidate, EstParameters, VecNum
+        For GPC's TrainMyClassifier() output is: validate, EstParameters
+
+        TestMyClassifier() output: Ytest
+
+    (6) As GPR in sklearn doesn't support returning probabilities with all-pairs(i.e. one_vs_one) method, we have to use one_vs_rest to train a classifier for each pair of classes. So returned EstParameters is a dict of parameters and hyper-parameters, each of them is a 2d array containing parameters for each pair of classes.
+
+    (7) For MyConfusionMatrix(), the input Y should be estimated class names, and ClassNames is the true answer. Their format should be the same as input 'Proj2TargetOutputsSet1.mat', instead of class labels with probabilities.
+
+    (8) DataAnalysis.py analyses the distribution of distance of each cluster from its centroid. It can be used get an idea
+        about the separability of data in the input space. It can also randomly split data in a way to preserve the distance
+        distribution of each cluster in the validation dataset thereby giving stable results across all validation tests. The
+        distance was scaled using covaraince in each dimension of the input space.
